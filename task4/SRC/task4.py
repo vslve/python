@@ -56,7 +56,7 @@ def main():
 
     if len(sys.argv) != 3:
         print()
-        print("Enter two lines for comparison as command-line arguments, for example: main.py 'a' 'a*'")
+        print("Enter two lines for comparison as command-line arguments, for example: main.py 'a' 'a*'\n\nthe * character in the second line means any combination of any characters")
         print()
     else:
         print(is_equal_strings(sys.argv[1], sys.argv[2]))
