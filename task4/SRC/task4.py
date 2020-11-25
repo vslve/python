@@ -1,12 +1,11 @@
+""" The program compares two strings and prints 'OK' if they are equal and 'KO' otherwise """
+
 def is_equal_strings(first_string:str, second_string:str):
 
     first_length = len(first_string)
     second_length = len(second_string)
 
     length = min(first_length, second_length)
-
-    print(first_length, second_length)
-    print(first_string, second_string)
     
     for i in range(length):
         first_char = first_string[i]
@@ -18,19 +17,19 @@ def is_equal_strings(first_string:str, second_string:str):
                 while (i < second_length and second_char == '*' ):
                     second_char = second_string[i]
                     i += 1
-                if i == second_length:
+                if i == second_length and second_char == '*':
                     return 'OK'
                 if first_char == second_char:
                     return is_equal_strings(first_string[k - 1:], second_string[i - 1:])
                 while (k < first_length and first_char != second_char):
                     first_char = first_string[k]
                     k += 1
-                if k != first_length:
+                if k != first_length or first_char == second_char:
                     return is_equal_strings(first_string[k - 1:], second_string[i - 1:])
                 return 'KO'
-            if first_char != '*':
+            second_char = second_string[0]
+            if first_char != '*' and second_char == '*':
                 k = i + 1
-                second_char = second_string[0]
                 while (k < first_length and first_char != second_char):
                     first_char = first_string[k]
                     k += 1
@@ -53,7 +52,9 @@ def is_equal_strings(first_string:str, second_string:str):
 def main():
 
     if len(sys.argv) != 3:
-        print("Введите две строки для сравнения в качестве аргументов командной строки, например: main.py 'a' 'a*'")
+        print()
+        print("Enter two lines for comparison as command-line arguments, for example: main.py 'a' 'a*'")
+        print()
     else:
         print(is_equal_strings(sys.argv[1], sys.argv[2]))
     

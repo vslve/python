@@ -1,4 +1,15 @@
+""" The program find if sphere and line have colission points and print it in console.
 
+    To run program enter 'program_name.py source_file_name.txt' in console.
+    
+    sourse_file must have folowing format: 
+
+    {sphere: {center: [0, 0, 0], radius: 10.67}, line: {[1, 0.5, 15], [43, -14.6, 0.04]}} 
+
+    pay atention the placement of spaces inside objects.
+"""
+    
+    
 
 class Point:
 
@@ -16,8 +27,9 @@ class Line:
     def __init__(self, point1:Point, point2:Point):
         self.point1 = point1
         self.point2 = point2
+        self.dv = self.__get_direct_vector()
         
-    def get_direct_vector(self) -> Point:
+    def __get_direct_vector(self) -> Point:
 
         return Point(self.point2.x - self.point1.x, self.point2.y - self.point1.y, self.point2.z - self.point1.z)
         
@@ -30,7 +42,7 @@ class Sphere:
 
 def get_quadratic_equation_coefficients(line:Line, sphere:Sphere) -> list:
     
-    dv = line.get_direct_vector()
+    dv = line.dv
     pt = line.point1
 
     c = sphere.center
@@ -45,7 +57,7 @@ def get_quadratic_equation_coefficients(line:Line, sphere:Sphere) -> list:
 def find_collision_point(line:Line, t:float) -> Point:
 
         pt = line.point1
-        dv = line.get_direct_vector()
+        dv = line.dv
 
         x = pt.x + t * dv.x
         y = pt.y + t * dv.y
@@ -67,7 +79,56 @@ def solve_quadratic_equation(a, b, c) -> list:
     x1 = (-b - desc ** 0.5) / (2 * a)
     x2 = (-b + desc ** 0.5) / (2 * a)
     
-    return [x1, x2] 
+    return [x1, x2]
+    
+def convert_source_to_dict(source_string:str) -> dict:
+    """ Function convert str object like
+
+        '{sphere: {center: [0, 0, 0], radius: 10.67}, line: {[1, 0.5, 15], [43, -14.6, 0.04]}}'
+
+        to dict object like
+
+        {'sphere': {'center': [0.0, 0.0, 0.0], 'radius': 10.67}, 'line': {'point1': [1.0, 0.5, 15.0], 'point2': [43.0, -14.6, 0.04]}}
+    """
+    source = source_string.split('}')
+    for sep in ('{', ':', '[', ']', ',', ' '):
+        source = ''.join(source).split(sep)
+    
+    objects = []
+    for el, cnt in (('radius', 2), ('center', 4), ('line', 7)):
+        i = source.index(el)
+        objects.append([float(x) for x in source[i + 1 : i + cnt]])
+        
+    radius, center, line = objects
+    point1, point2 = line[:3], line[3:]
+    
+    return {'sphere': {'center': center, 'radius': radius[0]}, 'line': {'point1': point1, 'point2': point2}}
+   
+def create_line(source:str):
+    """ Function gets str object in the folowing format: 
+        
+        {'point1': [1.0, 0.5, 15.0], 'point2': [43.0, -14.6, 0.04]}
+        
+        retrun Point object.
+    """
+    
+    point1 = Point(*source.get('point1'))
+    point2 = Point(*source.get('point2'))
+
+    return Line(point1, point2)
+        
+def create_sphere(source:str):
+    """ Function gets str object in the folowing format: 
+        
+        {'center': [0.0, 0.0, 0.0], 'radius': 10.67}
+        
+        retrun Sphere object.
+    """
+    
+    center = Point(*(source.get('center')))
+    radius = source.get('radius')
+    
+    return Sphere(center, radius)
 
 def find_sphere_line_collision(line:Line, sphere:Sphere):
 
@@ -90,29 +151,6 @@ def find_sphere_line_collision(line:Line, sphere:Sphere):
         return f'{point_one.__str__()}{point_two.__str__()}'
 
     return 'Коллизий не найдено'
-    
-def convert_source_to_dict(source_string:str) -> dict:
-    """ Function conver str object like
-
-        '{sphere: {center: [0, 0, 0], radius: 10.67}, line: {[1, 0.5, 15], [43, -14.6, 0.04]}}'
-
-        to dict object like
-
-        {'sphere': {'center': [0.0, 0.0, 0.0], 'radius': 10.67}, 'line': {'point1': [1.0, 0.5, 15.0], 'point2': [43.0, -14.6, 0.04]}}
-    """
-    source = source_string.split('}')
-    for sep in ('{', ':', '[', ']', ',', ' '):
-        source = ''.join(source).split(sep)
-    
-    objects = []
-    for el, cnt in (('radius', 2), ('center', 4), ('line', 7)):
-        i = source.index(el)
-        objects.append([float(x) for x in source[i + 1 : i + cnt]])
-        
-    radius, center, line = objects
-    point1, point2 = line[:3], line[3:]
-    
-    return {'sphere': {'center': center, 'radius': radius[0]}, 'line': {'point1': point1, 'point2': point2}}
    
 def main():
     
@@ -122,7 +160,7 @@ def main():
         f = open(file_name, 'r')
         f.close()
     except:
-        print("Не удалось открть файл")
+        print("Couldn't open the file")
     else:
         with open(file_name, 'r') as source_file:
             count = 0
@@ -135,31 +173,27 @@ def main():
                 try:
                     source = convert_source_to_dict(line)
                 except:
-                    print(f'Строка {count}: некорректный формат данных')
+                    print(f'String {count}: invalid data format')
                     print("""
-Данные о сфере и линии должный иметь вид:
+Data about the sphere and line should have folowing format:
 
                     {sphere: {center: [0, 0, 0], radius: 10.67}, line: {[1, 0.5, 15], [43, -14.6, 0.04]}}
                         
-Объекты и ключи могут находится в свободной последовательности. Соблюдайте расстановку пробельных символов внутри объектов.
+Objects and keys can be placed in a free sequence. Observe the placement of whitespace characters inside objects
 """)
 
                 else:
-                    center_coordinates = source.get('sphere').get('center')
-                    center = Point(*center_coordinates)
-                    radius = source.get('sphere').get('radius')
-                    sphere = Sphere(center, radius)
+                
+                    line_source = source.get('line')
+                    line = create_line(line_source)
                     
-                    point1_coordinates = source.get('line').get('point1')
-                    point2_coordinates = source.get('line').get('point2')
-                    point1 = Point(*point1_coordinates)
-                    point2 = Point(*point2_coordinates)
-                    line = Line(point1, point2)
+                    sphere_source = source.get('sphere')
+                    sphere = create_sphere(sphere_source)
 
                     print(find_sphere_line_collision(line, sphere))
 
             if count == 0:
-                print("Файл пуст")
+                print("File is empty")
 
 if __name__ == '__main__':
 
@@ -167,13 +201,14 @@ if __name__ == '__main__':
 
     if len(sys.argv) != 2:
         print("""
-Передайте имя файла с данными о сфере и линии в качестве аргумента командной строки, например: main.py main.txt.
+Pass the name of the file with the sphere and line data as a command-line argument, for example: main.py main.txt
         
-Данные о сфере и линии должный иметь вид:
+Data about the sphere and line should have folowing format:
 
                     {sphere: {center: [0, 0, 0], radius: 10.67}, line: {[1, 0.5, 15], [43, -14.6, 0.04]}}
                         
-Объекты и ключи могут находится в свободной последовательности. Соблюдайте расстановку пробельных символов внутри объектов.""")
+Objects and keys can be placed in a free sequence. Observe the placement of whitespace characters inside objects.
+""")
     else:
         main()
     
