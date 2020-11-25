@@ -1,4 +1,7 @@
-""" The program compares two strings and prints 'OK' if they are equal and 'KO' otherwise """
+""" The program compares two strings and prints 'OK' if they are equal and 'KO' otherwise 
+    
+    the * character in the second line means any combination of any characters
+"""
 
 def is_equal_strings(first_string:str, second_string:str):
 
