@@ -150,7 +150,7 @@ def find_sphere_line_collision(line:Line, sphere:Sphere):
         
         return f'{point_one.__str__()}{point_two.__str__()}'
 
-    return 'Коллизий не найдено'
+    return 'No collision detected'
    
 def main():
     
