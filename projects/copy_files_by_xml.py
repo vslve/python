@@ -1,9 +1,11 @@
+import sys
+
 import xml.etree.ElementTree as ET
 from pathlib import Path
-"""Program copies files using data from xml config file
 
+"""Program copies files using data from xml config file
     xml format example:
-    
+
     <config> 
         <file 
             source_path="/var/log" 
@@ -12,11 +14,10 @@ from pathlib import Path
         /> 
         ...
     </config>
-    
+
 """
 
-
-source_xml = 'config.xml'
+source_xml = sys.argv[1] if len(sys.argv) > 1 else 'config.xml'
 source_tag_name = 'file'
 
 attributes_names = {
@@ -46,10 +47,3 @@ for event, elem in ET.iterparse(source_xml):
         finally:
             file_number += 1
             elem.clear()
-
-
-
-
-
-
-
