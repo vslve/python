@@ -14,6 +14,9 @@ import cpfiles as cp
            />
            ...
        </config>
+    
+    if tag name that defines the file or its attributes names are differ from example above
+    change it in copy_file_by_xml_config function arguments
 """
 
 source_xml = sys.argv[1] if len(sys.argv) > 1 else 'config.xml'
