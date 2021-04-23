@@ -2,7 +2,7 @@ import sys
 
 import cpfiles as cp
 
-"""Program copies file using info from xml config file
+"""Program copies files using info from xml config file
    If config file name is differ from 'config.xml' pass it as command line argument
 
    xml format example:
