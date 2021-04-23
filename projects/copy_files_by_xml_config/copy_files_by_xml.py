@@ -4,7 +4,7 @@ import cpfiles as cp
 
 """Program copies file using info from xml config file
    If config file name is differ from 'config.xml' pass it as command line argument
-   
+
    xml format example:
        <config>
            <file
@@ -14,9 +14,6 @@ import cpfiles as cp
            />
            ...
        </config>
-       
-    if tag name that defines the file or its attributes names are differ from example above
-    change it in copy_file_by_xml_config function arguments 
 """
 
 source_xml = sys.argv[1] if len(sys.argv) > 1 else 'config.xml'

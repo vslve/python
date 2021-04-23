@@ -5,9 +5,7 @@ from pathlib import Path
 def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_attribute: str, source_path_attribute: str,
                             destination_path_attribute: str, verbose: bool = False) -> bool:
     """Copies files using data from xml config file
-
        xml format example:
-
        <config>
            <file
                source_path="/var/log"
@@ -16,16 +14,13 @@ def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_att
            />
            ...
        </config>
-
        :param source_xml: xml config file name
        :param source_tag_name: the name of the tag that defines the file
        :param file_name_attribute: the name of the tag attribute that defines the file name to copy
        :param source_path_attribute: the name of the tag attribute that defines the path to source folder
        :param destination_path_attribute: the name of the tag attribute that defines the path to destination folder
        :param verbose: output process information to the console
-
-       :return False if config file is not found or config file name is empty string
-
+       :return: False if config file is not found or config file name is empty string else True
     """
 
     if source_xml == "" or not Path(source_xml).exists():
@@ -38,8 +33,8 @@ def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_att
         if elem.tag == source_tag_name:
             files_number += 1
             try:
-                _copy_file(*_get_paths_to_files_from_xml(elem, file_name_attribute,
-                                                         source_path_attribute, destination_path_attribute))
+                copy_file(*_get_paths_to_files_from_xml(elem, file_name_attribute,
+                                                        source_path_attribute, destination_path_attribute))
                 files_copied += 1
             except TypeError:
                 if verbose:
@@ -70,7 +65,11 @@ def _get_paths_to_files_from_xml(xml_elem: ET.Element, file_name_attribute: str,
     return source_path, destination_path
 
 
-def _copy_file(source_file_name: str, destination_file_name: str):
+def copy_file(source_file_name: str, destination_file_name: str):
+    """
+    :param source_file_name:  full path to source file
+    :param destination_file_name:  full path to destination file
+    """
     with open(source_file_name, 'r', encoding='utf-8') as source:
         with open(destination_file_name, 'w', encoding='utf-8') as result:
             for line in source:
@@ -79,3 +78,4 @@ def _copy_file(source_file_name: str, destination_file_name: str):
 
 if __name__ == '__main__':
     pass
+
