@@ -15,7 +15,7 @@ import cpfiles as cp
            ...
        </config>
     
-    if tag name that defines the file or its attributes names are differ from example above
+    if tag name that defines the file or tag attributes names are differ from example above
     change it in copy_file_by_xml_config function arguments
 """
 

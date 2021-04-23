@@ -5,7 +5,9 @@ from pathlib import Path
 def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_attribute: str, source_path_attribute: str,
                             destination_path_attribute: str, verbose: bool = False) -> bool:
     """Copies files using data from xml config file
+    
        xml format example:
+       
        <config>
            <file
                source_path="/var/log"
@@ -14,6 +16,7 @@ def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_att
            />
            ...
        </config>
+       
        :param source_xml: xml config file name
        :param source_tag_name: the name of the tag that defines the file
        :param file_name_attribute: the name of the tag attribute that defines the file name to copy
