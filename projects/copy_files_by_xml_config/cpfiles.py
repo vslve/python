@@ -48,7 +48,8 @@ def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_att
                     print(f'file {files_number}: Incorrect file data')
             finally:
                 elem.clear()
-
+        elem.clear()
+        
     if verbose:
         print(f'Files found: {files_number}')
         print(f'Files copied: {files_copied}')
