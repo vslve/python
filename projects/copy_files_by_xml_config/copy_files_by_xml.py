@@ -1,11 +1,22 @@
-import sys
+"""
+Program copies file using info from xml config file
+ 
+To run the program enter program name and its args: 
 
-import cpfiles as cp
+    program.py config_file.xml file_tag file_name_attr source_path_attr destination_path_attr 
 
-"""Program copies files using info from xml config file
-   If config file name is differ from 'config.xml' pass it as command line argument
+file_tag: the name of the xml tag that defines the file
+file_name_attr: the name of the file_tag attribute that defines the file name to copy
+source_path_attr: the name of the file_tag attribute that defines the path to source folder
+destination_path_attr: the name of the file_tag attribute that defines the path to destination folder 
 
-   xml format example:
+Example:
+
+    program name: copy.py
+    config xml file name: config.xml
+    
+    config xml file format:
+    
        <config>
            <file
                source_path="/var/log"
@@ -14,17 +25,44 @@ import cpfiles as cp
            />
            ...
        </config>
+       
+    command to run: copy.py config.xml file file_name source_path destination_path
+
+If name of the file_tag and names of the file_tag attributes do not differ from the example config xml
+it can be omitted: 
     
-    if tag name that defines the file or tag attributes names are differ from example above
-    change it in copy_file_by_xml_config function arguments
+                    copy.py config.xml
 """
 
-source_xml = sys.argv[1] if len(sys.argv) > 1 else 'config.xml'
+default_args = ('file', 'file_name', 'source_path', 'destination_path')
 
-while True:
-    if cp.copy_file_by_xml_config(source_xml, 'file', 'file_name', 'source_path', 'destination_path', True):
-        break
-    print('Incorrect config file name\nEnter config file name (example: config.xml) or 0 to exit: ')
-    source_xml = input()
-    if source_xml == '0':
-        exit()
+
+def main():
+    args = sys.argv[1:]
+    argc = len(args)
+
+    if argc == 0:
+        print('Enter config xml file name to copy files or -usage to show program usage guide: ')
+        args.append(input())
+        argc += 1
+    if args[0] == '-usage':
+        print(__doc__)
+        return
+    if argc == 1:
+        args.extend(default_args)
+
+    try:
+        if not cp.copy_file_by_xml_config(*args, verbose=True):
+            print('Incorrect config file name')
+    except TypeError:
+        print('Incorrect args')
+    finally:
+        print(f'\nEnter program_name.py -usage to show program usage guide')
+
+
+if __name__ == '__main__':
+    import sys
+
+    import copy_files as cp
+
+    main()

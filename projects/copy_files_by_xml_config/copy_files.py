@@ -5,9 +5,17 @@ from pathlib import Path
 def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_attribute: str, source_path_attribute: str,
                             destination_path_attribute: str, verbose: bool = False) -> bool:
     """Copies files using data from xml config file
-    
-       xml format example:
-       
+
+       :param source_xml: xml config file name
+       :param source_tag_name: the name of the xml tag that defines the file
+       :param file_name_attribute: the name of the xml tag attribute that defines the file name to copy
+       :param source_path_attribute: the name of the xml tag attribute that defines the path to source folder
+       :param destination_path_attribute: the name of xml the tag attribute that defines the path to destination folder
+       :param verbose: output process information to the console
+       :return: False if config file is not found or config file name is empty string else True
+
+       Example:
+
        <config>
            <file
                source_path="/var/log"
@@ -16,14 +24,11 @@ def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_att
            />
            ...
        </config>
-       
-       :param source_xml: xml config file name
-       :param source_tag_name: the name of the tag that defines the file
-       :param file_name_attribute: the name of the tag attribute that defines the file name to copy
-       :param source_path_attribute: the name of the tag attribute that defines the path to source folder
-       :param destination_path_attribute: the name of the tag attribute that defines the path to destination folder
-       :param verbose: output process information to the console
-       :return: False if config file is not found or config file name is empty string else True
+
+       source_tag_name = file
+       source_path_attribute = source_path
+       destination_path_attribute = destination_path
+       file_name_attribute = file_name
     """
 
     if source_xml == "" or not Path(source_xml).exists():
@@ -49,7 +54,6 @@ def copy_file_by_xml_config(source_xml: str, source_tag_name: str, file_name_att
             finally:
                 elem.clear()
         elem.clear()
-        
     if verbose:
         print(f'Files found: {files_number}')
         print(f'Files copied: {files_copied}')
