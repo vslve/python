@@ -1,5 +1,5 @@
 """
-Program copies file using info from xml config file
+Program copies files using info from xml config file
  
 To run the program enter program name and its args: 
 
