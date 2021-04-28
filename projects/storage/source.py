@@ -36,10 +36,10 @@ def get_client_data() -> tuple:
             print('Incorrect input')
             continue
         if not check_last_name_format(last_name):
-            print('Incorrect last name format. Enter correct last name')
+            print('Incorrect last name format')
             continue
         if not check_time(start_time, end_time):
-            print('Incorrect time format')
+            print('Incorrect time')
             continue
         return last_name, start_time, end_time
 

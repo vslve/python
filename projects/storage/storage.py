@@ -1,17 +1,18 @@
 import time
 
+
 class Storage:
 
     def __init__(self, size: int):
-        self.__size = size if size > 0 else 0
-        self.__storage = [Storage.StorageCell(i) for i in range(1, size + 1)]
+        self.__size: int = size if size > 0 else 0
+        self.__storage: list = [Storage.StorageCell(i) for i in range(1, size + 1)]
 
     @property
-    def size(self):
+    def size(self) -> int:
         return self.__size
 
     @property
-    def storage(self):
+    def storage(self) -> list:
         return self.__storage if self.__size > 0 else None
 
     class StorageCell:
@@ -27,11 +28,11 @@ class Storage:
             self.__start_time: time.struct_time or None = None
             self.__end_time: time.struct_time or None = None
 
-        def is_free(self, start_time: str) -> bool:
+        def is_free(self, start_time: time.struct_time) -> bool:
             return self.__end_time is None or self.__end_time < start_time
 
         @property
-        def start_time(self):
+        def start_time(self) -> time.struct_time:
             return self.__start_time
 
         @start_time.setter
@@ -42,7 +43,7 @@ class Storage:
                 self.__start_time = None
 
         @property
-        def end_time(self):
+        def end_time(self) -> time.struct_time:
             return self.__end_time
 
         @end_time.setter
@@ -56,7 +57,7 @@ class Storage:
                 self.__end_time = end_time
 
         @property
-        def holder_last_name(self):
+        def holder_last_name(self) -> str:
             return self.__holder_last_name
 
         @holder_last_name.setter
@@ -64,8 +65,5 @@ class Storage:
             self.__holder_last_name = holder_last_name
 
         @property
-        def cell_id(self):
+        def cell_id(self) -> int:
             return self.__cell_id
-
-
-
