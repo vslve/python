@@ -36,25 +36,19 @@ class Storage:
             return self.__start_time
 
         @start_time.setter
-        def start_time(self, start_time: str):
-            try:
-                self.__start_time = start_time
-            except ValueError:
-                self.__start_time = None
+        def start_time(self, start_time: time.struct_time):
+            self.__start_time = start_time
 
         @property
         def end_time(self) -> time.struct_time:
             return self.__end_time
 
         @end_time.setter
-        def end_time(self, end_time: str):
-            try:
-                end_time = end_time
-            except ValueError:
-                self.__end_time = None
-                return
+        def end_time(self, end_time: time.struct_time):
             if self.__start_time is not None and self.__start_time < end_time:
                 self.__end_time = end_time
+            else:
+                self.__end_time = None
 
         @property
         def holder_last_name(self) -> str:
