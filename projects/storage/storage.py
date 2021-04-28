@@ -4,7 +4,9 @@ import time
 class Storage:
 
     def __init__(self, size: int):
-        self.__size: int = size if size > 0 else 0
+        if size < 0:
+            raise ValueError('Incorrect size value')
+        self.__size: int = size
         self.__storage: list = [Storage.StorageCell(i) for i in range(1, size + 1)]
 
     @property
@@ -13,7 +15,7 @@ class Storage:
 
     @property
     def storage(self) -> list:
-        return self.__storage if self.__size > 0 else None
+        return self.__storage
 
     class StorageCell:
         count = 0
