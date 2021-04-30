@@ -17,6 +17,18 @@ class Storage:
     def storage(self) -> list:
         return self.__storage
 
+    def reserve_cell(self, last_name: str, start_time: time.struct_time, end_time: time.struct_time) -> bool:
+        reserved = False
+        for cell in self.storage:
+            if cell.is_free(start_time):
+                cell.start_time = start_time
+                cell.end_time = end_time
+                cell.holder_last_name = last_name
+                reserved = True
+                print(f'{cell.holder_last_name} {cell.cell_id}')
+                break
+        return reserved
+
     class StorageCell:
         count = 0
 
